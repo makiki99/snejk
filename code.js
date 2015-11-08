@@ -313,6 +313,10 @@ Game.reset = function() {
 	
 	Game.world.player.direction = "down"
 	Game.world.player.newDirection = "down"
+	Game.world.player.length = 3
+	Game.score.score = 0
+	Game.score.lengthMult = 100
+	Game.score.comboMult = 100
 	
 	Game.world.createMap()
 	
