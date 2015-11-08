@@ -229,7 +229,7 @@ Game.world.player.move = function(){
 			Game.world.spawnEatable()
 			//and then add score
 			Game.score.score += Math.floor(Game.score.lengthMult*Game.score.comboMult/100)
-			Game.score.lengthMult += 5
+			Game.score.lengthMult += 2
 			Game.score.comboMult += 20
 			break
 		
