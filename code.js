@@ -16,7 +16,7 @@ Game.world = {}
 
 Game.world.mapSize = [20,20] //rows then columns
 
-Game.world.tileSize = 32 //in px
+Game.world.tileSize = 24 //in px
 
 Game.world.map = []
 
