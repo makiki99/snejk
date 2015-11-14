@@ -17,11 +17,16 @@
 	<div>
 		<button onclick="Game.reset()" id="startButton" title="Shortcut: ENTER">START</button>
 	</div>
+	<div class="mods">
+		<button id="DT" onclick="Game.modifiers.change('DT')" title="Shortcut: Q" class="off">Double Time</button>
+		<button id="HT" onclick="Game.modifiers.change('HT')" title="Shortcut: W" class="off">Half Time</button>
+	</div>
 
 <!--------->
 
 	<script src="helper.js"></script>
 	<script src="code.js"></script>
+	<script src="modifiers.js"></script>
 	<script src="keyboard.js"></script>
 
 </body>

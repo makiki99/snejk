@@ -8,3 +8,15 @@ body {
 canvas {
   border:1px solid black;
 }
+
+.mods {
+  margin-top: 8px;
+}
+
+.on {
+  background-color: #22ee22;
+}
+
+.off {
+  background-color: #117711;
+}

@@ -4,9 +4,7 @@ var Game = {}
 
 /***********/
 
-Game.modifiers = {}
-Game.modifiers.doubleTime = false
-Game.modifiers.halfTime = false
+
 
 /***********/
 
@@ -235,7 +233,7 @@ Game.world.player.move = function(){
 			Game.world.player.length++
 			Game.world.spawnEatable()
 			//and then add score
-			Game.score.score += Math.floor(Game.score.lengthMult*Game.score.comboMult/100)
+			Game.score.score += Math.floor(Game.score.lengthMult*Game.score.comboMult*Game.score.modMult/10000)
 			Game.score.lengthMult += 2
 			Game.score.comboMult += 20
 			break
@@ -316,14 +314,11 @@ Game.reset = function() {
 	Game.score.comboMult = 100
 	Game.score.modMult = 100
 
-	switch (true) {
+	if (Game.modifiers.doubleTime)
+	{Game.score.modMult *= 1.2}
 
-		case (Game.modifiers.doubleTime):
-			Game.score.modMult *= 1.15
-		case (Game.modifiers.halfTime):
-			Game.score.modMult *= 0.75
-
-	}
+	if (Game.modifiers.halfTime)
+	{Game.score.modMult *= 0.5}
 
 	Game.score.modMult = Math.round(Game.score.modMult)
 	Game.world.createMap()
@@ -360,12 +355,5 @@ Game.reset = function() {
 
 
 	}
-
-	Game.world.player.moveLoop = setInterval(function(){
-
-		Game.world.player.move()
-		if (Game.score.comboMult > 100) { Game.score.comboMult -- }
-
-	}, 100)
 
 }
