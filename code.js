@@ -4,6 +4,12 @@ var Game = {}
 
 /***********/
 
+Game.multiplers = {}
+Game.multiplers.doubleTime = false
+Game.multiplers.halfTime = false
+
+/***********/
+
 Game.score = {}
 
 Game.score.score = 0
@@ -312,6 +318,16 @@ Game.world.createMap()
 
 Game.setModMult = function(){
 	Game.score.modMult = 100
+	switch (true) {
+
+		case (Game.multiplers.doubleTime):
+			Game.score.modMult *= 1.1
+		case (Game.multiplers.halfTime):
+			Game.score.modMult *= 0.75
+
+		Game.score.modMult = Math.round(Game.score.modMult)
+
+	}
 }
 
 Game.reset = function() {
