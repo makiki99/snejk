@@ -1,0 +1,10 @@
+body {
+  font-family: monospace;
+  width: 550px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+canvas {
+  border:1px solid black;
+}

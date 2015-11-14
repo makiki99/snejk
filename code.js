@@ -4,9 +4,9 @@ var Game = {}
 
 /***********/
 
-Game.multiplers = {}
-Game.multiplers.doubleTime = false
-Game.multiplers.halfTime = false
+Game.modifiers = {}
+Game.modifiers.doubleTime = false
+Game.modifiers.halfTime = false
 
 /***********/
 
@@ -301,47 +301,65 @@ Game.screen.redraw = function() {
 	document.getElementById("score").innerHTML = Game.score.score
 	document.getElementById("lengthMult").innerHTML = Game.score.lengthMult
 	document.getElementById("comboMult").innerHTML = Game.score.comboMult
+	document.getElementById("modMult").innerHTML = Game.score.modMult
 
-}
-
-//it is a good idea for now to create map instantly to not clog console.
-
-Game.world.player.moveLoop = setInterval(function(){
-
-	Game.world.player.move()
-
-	if (Game.score.comboMult > 100) { Game.score.comboMult -- }
-
-}, 100)
-
-Game.world.createMap()
-
-Game.setModMult = function(){
-	Game.score.modMult = 100
-	switch (true) {
-
-		case (Game.multiplers.doubleTime):
-			Game.score.modMult *= 1.1
-		case (Game.multiplers.halfTime):
-			Game.score.modMult *= 0.75
-
-		Game.score.modMult = Math.round(Game.score.modMult)
-
-	}
 }
 
 Game.reset = function() {
 
+	document.getElementById("startButton").innerHTML = "RESTART"
 	Game.world.player.direction = "down"
 	Game.world.player.newDirection = "down"
 	Game.world.player.length = 5
 	Game.score.score = 0
 	Game.score.lengthMult = 100
 	Game.score.comboMult = 100
-	Game.score.setModMult()
+	Game.score.modMult = 100
+
+	switch (true) {
+
+		case (Game.modifiers.doubleTime):
+			Game.score.modMult *= 1.15
+		case (Game.modifiers.halfTime):
+			Game.score.modMult *= 0.75
+
+	}
+
+	Game.score.modMult = Math.round(Game.score.modMult)
 	Game.world.createMap()
 
 	clearInterval(Game.world.player.moveLoop)
+
+	switch(true){
+
+		case (Game.modifiers.halfTime):
+			Game.world.player.moveLoop = setInterval(function(){
+
+				Game.world.player.move()
+				if (Game.score.comboMult > 100) { Game.score.comboMult -- }
+
+			}, 200)
+			break
+
+		case (Game.modifiers.doubleTime):
+			Game.world.player.moveLoop = setInterval(function(){
+
+				Game.world.player.move()
+				if (Game.score.comboMult > 100) { Game.score.comboMult -- }
+
+			}, 50)
+			break
+
+		default:
+			Game.world.player.moveLoop = setInterval(function(){
+
+				Game.world.player.move()
+				if (Game.score.comboMult > 100) { Game.score.comboMult -- }
+
+			}, 100)
+
+
+	}
 
 	Game.world.player.moveLoop = setInterval(function(){
 
