@@ -1,6 +1,7 @@
 Game.modifiers = {}
 Game.modifiers.doubleTime = false
 Game.modifiers.halfTime = false
+Game.modifiers.nightFall = false
 
 Game.modifiers.change = function (modname) {
 
@@ -24,6 +25,14 @@ Game.modifiers.change = function (modname) {
       }
       break
 
+    case "NF":
+      if (Game.modifiers.nightFall) {
+        Game.modifiers.nightFall = false
+      } else {
+        Game.modifiers.nightFall = true
+      }
+      break
+
     }
 
   if (Game.modifiers.doubleTime) {
@@ -36,6 +45,12 @@ Game.modifiers.change = function (modname) {
     document.getElementById("HT").className = "on"
   } else {
     document.getElementById("HT").className = "off"
+  }
+
+  if (Game.modifiers.nightFall) {
+    document.getElementById("NF").className = "on"
+  } else {
+    document.getElementById("NF").className = "off"
   }
 
 }

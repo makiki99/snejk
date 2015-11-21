@@ -32,6 +32,10 @@ function keypressFunction(e) {
 			Game.modifiers.change('HT')
 			break
 
+		case 69 :
+			Game.modifiers.change('NF')
+			break
+
 	}
 
 }

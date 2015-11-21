@@ -30,25 +30,10 @@ Game.world.createMap = function() {
 	/* remember
 		x is rows
 		y is columns
-		array has [x][y] format
-
-		I'll have to reverse this prob even by ugly hack, but for now it is working, so...
+		Game.world.map array has [x][y] format
 	*/
 
-	for (x=0; x < Game.world.mapSize[0] ;x++) {
-		for (y=0; y < Game.world.mapSize[1] ;y++){
-
-			/*test if loop works as intended (useful, don't delete (plz(or i will kill you(i'm dead seious))))
-
-			ctx.fillStyle = "red"
-			ctx.fillRect(y*Game.world.tileSize , x*Game.world.tileSize, Game.world.tileSize, Game.world.tileSize)
-
-			*/
-
-			Game.world.map = Helper.array.newZeroedArray([Game.world.mapSize[0],Game.world.mapSize[1]])
-
-		}
-	}
+	Game.world.map = Helper.array.newZeroedArray([Game.world.mapSize[0],Game.world.mapSize[1]])
 
 	//it is a good idea to spawn our snake, right? (I know, s**t implementation, but who cares)
 	Game.world.map[3][3] = 1
@@ -268,6 +253,7 @@ Game.screen = {}
 Game.screen.redraw = function() {
 
 	//I made this a bit ugly :(
+	ctx.globalAlpha = 1
 
 	for (x=0; x < Game.world.mapSize[0] ;x++) {
 		for (y=0; y < Game.world.mapSize[1] ;y++){
@@ -295,6 +281,74 @@ Game.screen.redraw = function() {
 		}
 	}
 
+	//nightfall mode mask rendering
+	if(Game.modifiers.nightFall) {
+		var nightFallMask = Helper.array.newZeroedArray([Game.world.mapSize[0],Game.world.mapSize[1]])
+		var headpos = Game.world.player.getHeadpos() //throws one error after snake dies, would be probably good idea to do something with this
+
+		if (headpos === undefined) {
+			ctx.globalAlpha = 0
+		} else {
+
+			for (x=0; x < Game.world.mapSize[0] ;x++) {
+				for (y=0; y < Game.world.mapSize[1] ;y++) {
+
+						if (Game.world.map[x][y] == -1) {
+
+							if ( Math.abs(x-headpos[0])>10 || Math.abs(y-headpos[1])>10 ) {
+								 nightFallMask[x][y] = 1
+							} else if ( Math.abs(x-headpos[0])>9 || Math.abs(y-headpos[1])>9 ) {
+								 nightFallMask[x][y] = 0.90
+							} else if ( Math.abs(x-headpos[0])>8 || Math.abs(y-headpos[1])>8 ) {
+								 nightFallMask[x][y] = 0.75
+							} else if ( Math.abs(x-headpos[0])>7 || Math.abs(y-headpos[1])>7 ) {
+								 nightFallMask[x][y] = 0.60
+							} else if ( Math.abs(x-headpos[0])>6 || Math.abs(y-headpos[1])>6 ) {
+								 nightFallMask[x][y] = 0.45
+							} else if ( Math.abs(x-headpos[0])>5 || Math.abs(y-headpos[1])>5 ) {
+								 nightFallMask[x][y] = 0.35
+							} else if ( Math.abs(x-headpos[0])>4 || Math.abs(y-headpos[1])>4 ) {
+								 nightFallMask[x][y] = 0.25
+							} else if ( Math.abs(x-headpos[0])>3 || Math.abs(y-headpos[1])>3 ) {
+								 nightFallMask[x][y] = 0.15
+							} else if ( Math.abs(x-headpos[0])>2 || Math.abs(y-headpos[1])>2 ) {
+								 nightFallMask[x][y] = 0.10
+							} else if ( Math.abs(x-headpos[0])>1 || Math.abs(y-headpos[1])>1 ) {
+								 nightFallMask[x][y] = 0.05
+							}
+
+						} else {
+
+							if (( Math.abs(x-headpos[0])>5 || Math.abs(y-headpos[1])>5 ) || ( Math.abs(x-headpos[0])>4 && Math.abs(y-headpos[1])>4 )) {
+								nightFallMask[x][y] = 1
+							} else if (( Math.abs(x-headpos[0])>4 || Math.abs(y-headpos[1])>4 ) || ( Math.abs(x-headpos[0])>3 && Math.abs(y-headpos[1])>3 )) {
+								nightFallMask[x][y] = 0.8
+							} else if (( Math.abs(x-headpos[0])>3 || Math.abs(y-headpos[1])>3 ) || ( Math.abs(x-headpos[0])>2 && Math.abs(y-headpos[1])>2 )) {
+								nightFallMask[x][y] = 0.5
+							} else if ( Math.abs(x-headpos[0])>2 || Math.abs(y-headpos[1])>2 ) {
+								nightFallMask[x][y] = 0.25
+							} else if ( Math.abs(x-headpos[0])>1 || Math.abs(y-headpos[1])>1 ) {
+								nightFallMask[x][y] = 0.1
+							} else {
+								nightFallMask[x][y] = 0
+							}
+
+						}
+					}
+				}
+
+				for (x=0; x < Game.world.mapSize[0] ;x++) {
+					for (y=0; y < Game.world.mapSize[1] ;y++){
+
+						ctx.globalAlpha = nightFallMask[x][y]
+						Helper.canvas.drawRect(x,y,"black")
+
+					}
+				}
+
+		}
+	}
+
 	//score and multiplers
 	document.getElementById("score").innerHTML = Game.score.score
 	document.getElementById("lengthMult").innerHTML = Game.score.lengthMult
@@ -314,11 +368,15 @@ Game.reset = function() {
 	Game.score.comboMult = 100
 	Game.score.modMult = 100
 
+	//mods multipler changes
 	if (Game.modifiers.doubleTime)
-	{Game.score.modMult *= 1.2}
+	{Game.score.modMult *= 1.24}
 
 	if (Game.modifiers.halfTime)
 	{Game.score.modMult *= 0.5}
+
+	if (Game.modifiers.nightFall)
+	{Game.score.modMult *= 1.08}
 
 	Game.score.modMult = Math.round(Game.score.modMult)
 	Game.world.createMap()
